@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Morvakar</title>
+
+  <style>
+
+    body {
+      background: #111;
+      color: white;
+      font-family: Arial;
+      max-width: 700px;
+      margin: auto;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #c0392b;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: #222;
+      border: 1px solid #555;
+      color: white;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin-top: 10px;
+      background: #222;
+      color: white;
+      border: 1px solid #555;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #333;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div id="startScreen">
+
+    <h1>Pevnost Morvakaru — Zlo se probouzí</h1>
+
+    <input id="playerName" placeholder="Zadej své jméno">
+
+    <button onclick="startGame()">
+      Vstoupit do pevnosti
+    </button>
+
+  </div>
+
+  <div id="game" style="display:none;">
+
+    <h2 id="welcome"></h2>
+
+    <p id="text"></p>
+
+    <div id="choices"></div>
+
+  </div>
+
+  <script>
+
+    let playerName = ""
+let score = 0
+    const story = {
+
+      start: {
+        text: "Před tebou stojí Pevnost Morvakaru.",
+
+        choices: [
+          {
+            text: "Vstup hlavní bránou",
+            next: "gate"
+          },
+          {
+            text: "Tajná stezka podél hradeb",
+            next: "wall"
+          }
+        ]
+      },
+
+      gate: {
+        text: "Prošel jsi hlavní branou.",
+
+        choices: [
+          {
+            text: "Zpět na začátek",
+            next: "start"
+          }
+        ]
+      },
+
+       wall: {
+        text: "Našel jsi tajný vstup.",
+
+        choices: [
+          {
+            text: "Zpět na začátek",
+            next: "ending1"
+          }
+        ]
+      },
+
+      ending1: {
+        text: "Ztracen v hlubinách",
+
+        choices: [
+          {
+            text: "Ukončit hru",
+            next: "submitEnding"
+          }
+        ]
+      }
+
+    }
+
+
+    function startGame() {
+
+      playerName = document.getElementById("playerName").value
+
+      if (playerName === "") {
+        alert("Zadej jméno")
+        return
+      }
+
+      document.getElementById("startScreen").style.display = "none"
+
+      document.getElementById("game").style.display = "block"
+
+      document.getElementById("welcome").innerText =
+        "Vítej, " + playerName
+
+      loadScene("start")
+    }
+
+
+    function loadScene(sceneName) {
+
+      const scene = story[sceneName]
+
+      document.getElementById("text").innerText = scene.text
+
+      const choicesDiv =
+        document.getElementById("choices")
+
+      choicesDiv.innerHTML = ""
+
+      scene.choices.forEach(choice => {
+
+        const button =
+          document.createElement("button")
+
+        button.innerText = choice.text
+
+        button.onclick = function () {
+
+  if(choice.next === "submitEnding") {
+
+    submitResult("Ztracen v hlubinách")
+
+  } else {
+
+    loadScene(choice.next)
+  }
+}
+
+        choicesDiv.appendChild(button)
+
+      })
+    }
+    async function submitResult(endingName) {
+
+  await fetch("https://script.google.com/macros/s/AKfycbz8HdV3nx1InI0ClRLeW20MvLj9bXnH3n0dG__GLjai27CXBBwnnBqrCicqe8JrYeYo/exec", {
+
+    method: "POST",
+
+    body: JSON.stringify({
+      name: playerName,
+      ending: endingName,
+      score: score
+    })
+
+  })
+
+  alert("Výsledek uložen!")
+}
+
+  </script>
+
+</body>
+</html>
