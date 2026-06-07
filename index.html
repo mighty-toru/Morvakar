@@ -24,9 +24,212 @@
       font-family: Arial, sans-serif;
     }
 
+    #resultMessage {
+  text-align: center;
+
+  font-size: 26px;
+  font-weight: bold;
+
+  margin-bottom: 20px;
+
+  opacity: 0;
+
+  transition: opacity 0.5s ease;
+}
+
+    #scoreDisplay {
+  position: sticky;
+  top: 0;
+
+  font-size: 18px;
+  font-weight: bold;
+
+  color: #f0d06a;
+  text-align: left;
+
+  margin-bottom: 10px;
+
+  text-shadow: 0 0 8px rgba(0,0,0,0.6);
+}
+
+#scorePopup {
+  position: fixed;
+  top: 100px;
+  left: 4%;
+  transform: translateX(-50%);
+
+  font-size: 38px;
+  font-weight: 800;
+
+  padding: 12px 20px;
+
+  text-shadow: 0 0 14px rgba(254, 192, 20, 0.959);
+
+  opacity: 0;
+  transform: translateX(-50%) translateY(0px) scale(0.6);
+  transition: none;
+
+  pointer-events: none;
+}
+
+.score-low {
+  color: #ff5a5a;
+  text-shadow: 0 0 12px rgba(255, 90, 90, 0.8);
+  border-color: rgba(255, 90, 90, 0.6);
+}
+
+.score-mid {
+  color: #ffd86b;
+  text-shadow: 0 0 12px rgba(255, 216, 107, 0.8);
+  border-color: rgba(255, 216, 107, 0.6);
+}
+
+.score-high {
+  color: #7CFF7C;
+  text-shadow: 0 0 12px rgba(124, 255, 124, 0.8);
+  border-color: rgba(124, 255, 124, 0.6);
+}
+
+#scorePopup.show {
+  animation:
+    popScore 0.65s cubic-bezier(0.2, 0.9, 0.2, 1) forwards,
+    floatUp 1.6s ease-in-out 0.65s forwards;
+}
+
+@keyframes popScore {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px) scale(0.6);
+  }
+
+  12% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px) scale(1.35);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-60px) scale(1);
+  }
+}
+
+@keyframes floatUp {
+  0% { transform: translateX(-50%) translateY(-60px) scale(1); }
+  100% { transform: translateX(-50%) translateY(-70px) scale(1); }
+}
+
+#progressContainer {
+  position: sticky;
+  top: 35px;
+
+  width: 100%;
+  max-width: 700px;
+  height: 10px;
+
+  background: rgba(255,255,255,0.08);
+  border-radius: 20px;
+
+  margin: 10px auto 20px auto;
+
+  overflow: hidden;
+
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#progressBar {
+  height: 100%;
+  width: 0%;
+
+  background: linear-gradient(90deg, #d0210d, #f5c010, #06c206);
+
+  border-radius: 20px;
+
+  transition: width 0.5s ease;
+}
+
+.endingBanner {
+  text-align: center;
+
+  font-size: 42px;
+  font-weight: bold;
+
+  margin-bottom: 25px;
+
+  color: #f5c010;
+
+  text-shadow:
+    0 0 10px rgba(245,192,16,0.5),
+    0 0 25px rgba(245,192,16,0.3);
+
+  animation: endingFade 1s ease;
+}
+
+@keyframes endingFade {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.correct {
+  color: #19c027;
+
+  text-shadow:
+    0 0 10px rgba(101,212,110,0.5);
+}
+
+.wrong {
+  color: #db0d0d;
+
+  text-shadow:
+    0 0 10px rgba(212,84,84,0.5);
+}
+
+.question {
+  color: #dca414;
+
+  font-style: italic;
+
+  margin-top: 18px;
+
+  display: block;
+
+  line-height: 1.7;
+
+  text-shadow:
+    0 0 8px rgba(216,185,106,0.15);
+}
+
+
+    .introText {
+  color: #b8b8b8;
+
+  font-size: 16px;
+  line-height: 1.5;
+
+  font-style: italic;
+  text-align: center;
+
+  max-width: 880px;
+  margin: 0 auto 30px auto;
+
+  letter-spacing: 0.3px;
+
+  text-shadow:
+    0 0 6px rgba(0,0,0,0.6);
+}
+
     #container {
       max-width: 700px;
       margin: auto;
+
+      transition: opacity 0.18s ease;
+      opacity: 1;
 
       background: rgba(15,15,15,0.88);
 
@@ -42,6 +245,10 @@
         0 0 30px rgba(0,0,0,0.7),
         0 0 10px rgba(120,0,0,0.2);
     }
+
+    #container.fade-out {
+  opacity: 0;
+}
 
     h1 {
       color: #c0392b;
@@ -60,7 +267,15 @@
       font-size: 20px;
       letter-spacing: 1px;
 
-      border-bottom: 1px solid rgba(192,57,43,0.25);
+      border-bottom: 3px solid rgba(192,57,43,0.25);
+      padding-bottom: 10px;
+    }
+
+    h3 {
+      color: #c0392b;
+      margin-bottom: 25px;
+      font-size: 20px;
+      letter-spacing: 1px;
       padding-bottom: 10px;
     }
 
@@ -111,12 +326,38 @@
       transition: 0.2s;
     }
 
-    button:hover {
-      background: linear-gradient(#351515, #220d0d);
-      border-color: #c0392b;
-      transform: translateY(-2px);
-      box-shadow: 0 0 12px rgba(192,57,43,0.25);
+    button:active {
+  transform: translateY(0px) scale(0.97);
+  filter: brightness(0.85);
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
     }
+
+    button:active {
+  animation: clickPulse 0.15s ease;
+}
+
+@keyframes clickPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.98); }
+  100% { transform: scale(0.99); }
+}
+
+    button {
+  transition: transform 0.08s ease, filter 0.15s ease, box-shadow 0.2s ease;
+}
+
+    button {
+  -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+  button:hover {
+    background: linear-gradient(#351515, #220d0d);
+    border-color: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 0 12px rgba(192,57,43,0.25);
+  }
+}
 
     img {
       width: 100%;
@@ -167,19 +408,56 @@
 
 <body>
 
-  <audio id="bgMusic" loop autoplay>
+  <audio id="bgMusic" loop>
     <source src="audio/morvakar.mp3" type="audio/mpeg">
+  </audio>
+
+  <audio id="scoreSound">
+    <source src="audio/score.mp3" type="audio/mpeg">
   </audio>
 
   <button id="muteButton" onclick="toggleMusic()">
     🔊 Zvuk
   </button>
 
+  <div id="scoreDisplay">Score: 0</div>
+
+  <div id="progressContainer">
+  <div id="progressBar"></div>
+</div>
+
+  <div id="scorePopup"></div>
+
+  <div id="endScreen" style="display:none; text-align:center; margin-top:40px;"></div>
+
   <div id="container">
 
     <div id="startScreen">
 
       <h1>Pevnost Morvakaru — Zlo se probouzí</h1>
+
+      <div class="introText">
+
+  Po celé generace byla Pevnost Morvakaru opuštěným místem,
+  kterému se lidé vyhýbali širokým obloukem.
+
+  <br><br>
+
+  Jenže před několika dny začalo z ruin zářit rudé světlo
+  a okolní vesnice zachvátil strach.
+
+  <br><br>
+
+  Mizí lidé, dobytek i celé hlídky vyslané k pevnosti.
+  Staří kronikáři tvrdí, že hluboko pod hradem byla kdysi
+  uzavřena síla, která se nyní začíná probouzet.
+
+  <br><br>
+
+  Království potřebuje odpovědi.
+  A tak cesta do nitra pevnosti připadla právě tobě.
+
+</div>
 
       <input id="playerName" placeholder="Zadej své jméno">
 
@@ -191,7 +469,11 @@
 
     <div id="game" style="display:none;">
 
+      <div id="endingBanner"></div>
+
       <h2 id="chapter"></h2>
+
+      <div id="resultMessage"></div>
 
       <img id="sceneImage" style="display:none;">
 
@@ -204,42 +486,1032 @@
   </div>
 
   <script>
-
+    let ending = 0
     let playerName = ""
     let score = 0
+    let isSubmitting = false
+    let gameEnded = false
+    let totalScenes = 0
+    let progress = 0
+    let visitedScenes = new Set()
+
+    const scoreSound = document.getElementById("scoreSound")
+
+const audioConfig = {
+  low: 0.12,
+  mid: 0.2,
+  high: 0.32
+}
 
     const story = {
 
-      start: {
-        chapter: "AKT I — Hradby pevnosti",
-        text: "Před tebou stojí Pevnost Morvakaru.",
-        choices: [
-          { text: "Vstup hlavní bránou", next: "gate" },
-          { text: "Tajná stezka podél hradeb", next: "wall" }
-        ]
-      },
+  start: {
+    chapter: "AKT I — Vstup do pevnosti",
+    text: `
+Před tebou stojí stará pevnost Morvakaru.
+Popraskané hradby už dávno pohltila temnota a v tichu noci je slyšet jen vítr proudící mezi ruinami.
 
-      gate: {
-        chapter: "AKT I — Hradby pevnosti",
-        text: "Prošel jsi hlavní branou.",
-        choices: [{ text: "Pokračovat", next: "start" }]
-      },
+Místní se tomuto místu vyhýbají po generace — prý se v hlubinách pod hradem stále ozývá dech dávné bestie.
 
-      wall: {
-        chapter: "AKT II — Zapomenuté chodby",
-        text: "Našel jsi tajný vstup.",
-        choices: [{ text: "Pokračovat", next: "ending1" }]
-      },
+Do pevnosti vede několik cest. Každá skrývá jiná nebezpečí… i jiná tajemství.
+    `,
+    choices: [
+      { text: "Vstup hlavní bránou", next: "gate" },
+      { text: "Tajná stezka podél hradeb", next: "wall" },
+      { text: "Stará knihovna ve vsi", next: "library" }
+    ]
+  },
 
-      ending1: {
-        chapter: "AKT IV — Probuzení",
-        text: "Ztracen v hlubinách",
-        choices: [{ text: "Ukončit hru", next: "submitEnding" }]
-      }
+  death: {
+  chapter: "CHYBA",
+  result: "wrong",
+  text: `
+Zemřel jsi.
 
+Temnota tě pohltí a pevnost Morvakaru tě znovu spolkne do svých hlubin.
+
+<span class="question">
+Začínáš znovu od začátku.
+</span>
+  `,
+  choices: [
+    { text: "Začít znovu", next: "start" }
+  ]
+},
+
+  gate: {
+    chapter: "AKT I — Vstup do pevnosti",
+    score: 7,
+    text: `
+Prošel jsi hlavní branou a vstoupil na nádvoří pevnosti.
+Sotva ses stačil rozhlédnout, ze stínů se na tebe vyřítili dva zuřiví skřeti.
+Nemáš čas reagovat — boj začíná.
+
+<span class="question">
+Stojí proti tobě Skřet sekerník a Skřet se štítem. Co uděláš?
+</span>
+    `,
+    choices: [
+      { text: "Skřet se štítem je nemotorný, zaútočím nejdříve na Sekerníka", next: "ork1" },
+      { text: "Sekerník má jistě tupé sekery, vrhnu se po skřetovi se štítem", next: "ork2" }
+    ]
+  },
+
+  wall: {
+    chapter: "AKT I — Vstup do pevnosti",
+    score: 8,
+    text: `
+Tajná stezka kolem hradeb tě přivedla k ukrytému vchodu do pevnosti.
+Dveře jsou zamčené starou hádankou:
+
+<span class="question">
+Kteří dva trpaslíci se nacházejí na klanovém úkolu Vylodění?
+</span>
+    `,
+    choices: [
+      { text: "stařešina a stavitel", next: "dwarf1" },
+      { text: "obránce a střelec", next: "dwarf1" },
+      { text: "válečník a stavitel", next: "dwarf1" },
+      { text: "střelec a stařešina", next: "dwarf1" },
+      { text: "obránce a válečník", next: "dwarf2" },
+      { text: "žádní trpaslíci tam nejsou", next: "dwarf1" }
+    ]
+  },
+
+  library: {
+    chapter: "AKT I — Vstup do pevnosti",
+    score: 10,
+    text: `
+Stará knihovna je plná prachu a ticha, mezi regály zůstaly jen staré kroniky Morvakaru.
+Text je poškozený a těžko čitelný.
+
+Musíš v nich najít odpověď, než půjdeš dál.
+
+Při úkolu rádce Zabij Skřetího velitele vraha:
+
+<span class="question">
+Koho vlastně tento Skřetí velitel zavraždil?
+</span>
+    `,
+    choices: [
+      { text: "dědu", next: "vrah1" },
+      { text: "sestru", next: "vrah1" },
+      { text: "psa", next: "vrah1" },
+      { text: "tatínka", next: "vrah2" },
+      { text: "maminku", next: "vrah1" }
+    ]
+  },
+
+  ork1: {
+    chapter: "AKT I — Vstup do pevnosti",
+    result: "wrong",
+    score: -3,
+    text: `
+Prohrál jsi, skřeti tě přemohli a jsi raněný.
+Můžeš se ale vyléčit pomocí léčivých bylin — pokud ovšem znáš odpověď:
+
+<span class="question">
+Která z těchto jednotek neovládá kouzlo 'léčivé byliny'?
+</span>
+    `,
+    choices: [
+      { text: "Druid", next: "death" },
+      { text: "Bílý templář", next: "death" },
+      { text: "Elfka - světlá", next: "doorA" },
+      { text: "Galadriel", next: "death" }
+    ]
+  },
+
+  ork2: {
+    chapter: "AKT I — Vstup do pevnosti",
+    result: "correct",
+    score: 5,
+    text: `
+Skřeti jsou poraženi a nádvoří se znovu ponoří do ticha.
+Na jeho konci stojí dvoje dveře — jedny železné, chladné a těžké, druhé dřevěné, staré a popraskané.
+
+Vzduch kolem nich je jiný, těžší, varovný.
+
+<span class="question">
+Kam vstoupíš?
+</span>
+    `,
+    choices: [
+      { text: "železné dveře", next: "doorA" },
+      { text: "dřevěné dveře", next: "doorB" }
+    ]
+  },
+
+  dwarf1: {
+    chapter: "AKT I — Vstup do pevnosti",
+    result: "wrong",
+    score: -4,
+    text: `
+Nyní jsi uvězněn v pasti.
+
+Vysvobodíš se jedině tak, pokud odpovíš správně:
+
+<span class="question">
+Který stavitel neumí postavit past 'ostré kůly'?
+</span>
+    `,
+    choices: [
+      { text: "skřetí stavitel", next: "death" },
+      { text: "trpasličí stavitel", next: "cestaA" },
+      { text: "černý stavitel", next: "death" }
+    ]
+  },
+
+  dwarf2: {
+    chapter: "AKT I — Vstup do pevnosti",
+    result: "correct",
+    score: 5,
+    text: `
+Podařilo se ti vstoupit do pevnosti tajnou chodbou.
+
+Chodba se rozdvojuje — jedna úzká, prašná a plná pavučin,
+druhá širší, kamenná a udržovaná.
+
+<span class="question">
+Kam vstoupíš?
+</span>
+    `,
+    choices: [
+      { text: "úzká prašná cesta", next: "cestaA" },
+      { text: "široká kamenná cesta", next: "cestaB" }
+    ]
+  },
+
+  vrah1: {
+    chapter: "AKT I — Vstup do pevnosti",
+    result: "wrong",
+    score: -3,
+    text: `
+Kroniky jsou nejasné.
+
+Kronikář ti ale nabízí pomoc výměnou za správnou odpověď:
+
+<span class="question">
+Artefakt Kronikářský brk — ve které hře jej lze (opravdu) najít?
+</span>
+    `,
+    choices: [
+      { text: "Pán hradu", next: "death" },
+      { text: "Dark elf", next: "mapaA" },
+      { text: "Shakes and Fidget", next: "death" }
+    ]
+  },
+
+  vrah2: {
+    chapter: "AKT I — Vstup do pevnosti",
+    result: "correct",
+    score: 5,
+    text: `
+V kronikách jsi objevil dvě mapy.
+
+Jedna stará, zašlá a poničená.
+Druhá novější a přesná.
+
+<span class="question">
+Podle které se vydáš?
+</span>
+    `,
+    choices: [
+      { text: "stará mapa", next: "mapaA" },
+      { text: "nová mapa", next: "mapaB" }
+    ]
+  },
+
+  doorA: {
+  chapter: "AKT I — Vstup do pevnosti",
+  result: "correct",
+  score: 8,
+  text: `
+Železné dveře se pomalu otevřely a odhalily starou hradní síň.
+
+Na stole leží těžká lovecká kuše a několik černých šipek. Vezmi si je, než budeš pokračovat, mohou se ti hodit.
+
+Bude tě to ale něco stát - znáš odpověď na následující otázku?
+
+<span class="question">
+Dračí kuše - na jaké jednotky se vztahuje její bonus x3 k poškození? 
+</span>
+  `,
+  choices: [
+    { text: "dráčci", next: "katakomby" },
+    { text: "dráčci a draci", next: "death" },
+    { text: "dráčci, draci a veledraci", next: "death" }
+  ]
+},
+
+doorB: {
+  chapter: "AKT I — Vstup do pevnosti",
+  result: "correct",
+  score: 6,
+  text: `
+Dřevěné dveře se pomalu otevřely a odhalily menší zbrojnici ukrytou uvnitř pevnosti.
+
+Na stojanu u stěny visí starý dlouhý luk z tmavého dřeva, jehož tětiva je stále napjatá, jako by byl připravený k použití i po letech. Vedle něj leží toulec s několika černými šípy se železnými hroty. Vezmi si je, než budeš pokračovat, mohou se ti hodit.
+
+Bude tě to ale něco stát - znáš odpověď na následující otázku?
+
+<span class="question">
+Noldorský luk - na jaké jednotky se vztahuje jeho bonus x2 k poškození? 
+</span>
+  `,
+  choices: [
+    { text: "dráčci", next: "svatyně" },
+    { text: "dráčci a draci", next: "death" },
+    { text: "dráčci, draci a veledraci", next: "death" }
+  ]
+},
+
+cestaA: {
+  chapter: "AKT I — Vstup do pevnosti",
+  result: "correct",
+  score: 7,
+  text: `
+Úzká stezka tě vede hlouběji do útrob pevnosti. Strop je nízký a stěny vlhké, pokryté pavučinami, které se lepí na tvář při každém kroku.
+
+Po chvíli se chodba rozšíří do staré zásobovací uličky, kterou kdysi používali sluhové a kuchaři. Na háku u stěny visí těžký železný kuchařský nůž – hrubý, ale ostrý, zjevně často používaný i na něco jiného než jen jídlo.
+
+Vezmi si ho, než půjdeš dál. Může se ti hodit.
+
+Bude tě to ale něco stát - znáš odpověď na následující otázku?
+
+<span class="question">
+Který z vrhacích nožů umí léčit?
+</span>
+  `,
+  choices: [
+    { text: "vrhací nůž zlatý", next: "death" },
+    { text: "vrhací nůž černý", next: "katakomby" },
+    { text: "vrhací nůž otrávený", next: "death" }
+  ]
+},
+
+cestaB: {
+  chapter: "AKT I — Vstup do pevnosti",
+  result: "correct",
+  score: 4,
+  text: `
+Širší kamenná chodba je překvapivě udržovaná, jako by jí někdo stále používal. Ve zdech jsou zapuštěné staré pochodně.
+
+Cesta tě dovede k výklenku, který kdysi sloužil hradním lovcům. Na dřevěném stojanu leží lovecká dýka s černou rukojetí, lehce ošoupanou časem.
+
+Vezmi si ji, než budeš pokračovat. Může se ti hodit.
+
+Bude tě to ale něco stát - znáš odpověď na následující otázku?
+
+<span class="question">
+Která z vrhacích dýk umí léčit? 
+</span>
+  `,
+  choices: [
+    { text: "vrhací dýka zlatá", next: "death" },
+    { text: "vrhací dýka černá", next: "svatyně" },
+    { text: "vrhací dýka otrávená", next: "death" }
+  ]
+},
+
+mapaA: {
+  chapter: "AKT I — Vstup do pevnosti",
+  result: "correct",
+  score: 6,
+  text: `
+Podle staré mapy se vydáváš za vesnici, kde mezi kořeny starých stromů nacházíš skrytý vstup do země.
+
+Úzký servisní tunel kdysi sloužil pro nouzové zásobování pevnosti, ale je dávno opuštěný.
+
+Po chvíli chůze chodbou nacházíš zaprášený rytířský meč zapíchnutý hluboko do ztvrdlé země, jako by ho tam někdo zanechal úmyslně.
+
+Vytáhnout ho nebude snadné.
+
+Bude tě to ale něco stát - znáš odpověď na následující otázku?
+
+<span class="question">
+Angmarský meč - na jakou vzdálenost umí vystřelit blesk (pokud nestojíš na kopci/výspě)? 
+</span>
+  `,
+  choices: [
+    { text: "1 pole", next: "katakomby" },
+    { text: "2 pole", next: "death" },
+    { text: "3 pole", next: "death" }
+  ]
+},
+
+mapaB: {
+  chapter: "AKT I — Vstup do pevnosti",
+  result: "correct",
+  score: 5,
+  text: `
+Novější mapa tě vede k nenápadnému vstupu u okraje vesnice, kde se v zemi otevírá kamenný schod do starého zásobovacího tunelu.
+
+V jedné boční místnosti stojí zrezivělé, ale stále pevné kopí opřené o zeď, jako by ho tam někdo nechal připravené k použití.
+
+Stačí ho jen vzít… pokud odpovíš správně.
+
+Bude tě to ale něco stát - znáš odpověď na následující otázku?
+
+<span class="question">
+Artefakt "vrhací kopí" - na jakou vzdálenost s ním lze házet (pokud nestojíš na kopci/výspě)? 
+</span>
+  `,
+  choices: [
+    { text: "1 pole", next: "death" },
+    { text: "2 pole", next: "svatyně" },
+    { text: "3 pole", next: "death" }
+  ]
+},
+
+katakomby: {
+  chapter: "AKT II — Katakomby",
+  result: "correct",
+  score: 25,
+  text: `
+Cesta tě zavede hluboko pod pevnost. Schody mizí v temnotě, stěny katakomb jsou pokryté starými rytinami.
+
+Na jedné z kamenných desek je vytesán nápis, který navzdory stáří zůstává dokonale čitelný:
+
+„Morvakar spí, ale jeho hlad nikdy neutichá.“
+
+Jakmile uděláš poslední krok dolů, z temnoty se ozve suché zapraskání kostí.
+
+<span class="question">
+Z prázdna se zvedá "pekelný kostlivec", v rukou svírá zrezivělý meč. Boj začíná okamžitě. 
+</span>
+  `,
+  choices: [
+    { text: "Zasáhnout kostlivce do lebky rychlým útokem", next: "lose1" },
+    { text: "Uhýbat a čekat na jeho výpad, pak ho protiútokem rozbít", next: "win1" },
+    { text: "Zkusit mu kopnout nohy a srazit ho k zemi", next: "win1" },
+    { text: "Ustoupit a pokusit se utéct zpět do chodby", next: "lose1" }
+  ]
+},
+
+svatyne: {
+  chapter: "AKT II — Svatyně",
+  result: "correct",
+  score: 25,
+  text: `
+Tvé kroky tě zavedou do skryté svatyně uvnitř pevnosti.
+
+Kamenný prostor je tichý, uprostřed stojí rozbitý oltář a kolem něj visí potrhané praporce.
+
+Na podstavci oltáře někdo vyryl jediné jméno. Většina písmen je poškozená, ale jedno slovo lze stále přečíst bez potíží:
+
+„Morvakar“
+
+V tom se zpoza sloupu ozve hluboké zavrčení.
+
+<span class="question">
+Ze stínu vystupuje obrovský zdivočelý pes, jeho oči září a srst je slepená prachem a krví. Boj začíná bez varování. 
+</span>
+  `,
+   choices: [
+    { text: "Ustoupit a čekat na skok, pak ho zasáhnout", next: "win2" },
+    { text: "Hodit po něm zbraň a přerušit jeho útok", next: "win2" },
+    { text: "Zaútočit přímo a pokusit se ho přetlačit", next: "lose2" },
+    { text: "Zkusit se schovat za sloup a zmizet mu z dohledu", next: "lose2" }
+  ]
+},
+
+lose1: {
+  chapter: "AKT II — Katakomby",
+  result: "wrong",
+  score: -3,
+    text: `
+Meč pekelného kostlivce projde tvou obranou a temnota tě stáhne k zemi. Když znovu otevřeš oči, stojíš v tiché svatyni ozářené slabým fialovým světlem.
+
+Odpověz správně a tvá duše dostane ještě jednu šanci.
+
+<span class="question">
+Kdo unese více jablek?
+</span>
+  `,
+  choices: [
+    { text: "Selka (hodnost 9) vybavená Černými holenicemi", next: "svatyne" },
+    { text: "Maruška (hodnost 9) vybavená Železným obutím", next: "death" }
+  ]
+},
+
+lose2: {
+  chapter: "AKT II — Svatyně",
+  result: "wrong",
+  score: -3,
+    text: `
+Vzpomínáš si jen na náraz a těžké tlapy, které tě odtáhly pryč z místa boje. Probudíš se v katakombách, zraněný a vyčerpaný - ale stále naživu.
+
+Odpověz správně a tvé zesláblé tělo dostane ještě jednu šanci.
+
+<span class="question">
+Kdo má vyšší útok?
+</span>
+  `,
+  choices: [
+    { text: "Skřetí velitel (hodnost 9) vybavený Dvoubřitou sekerou", next: "katakomby" },
+    { text: "Trpaslík stařešina (hodnost 9) vybavený Skřetí šavlí", next: "death" }
+  ]
+},
+
+win1: {
+  chapter: "AKT II — Katakomby",
+  result: "correct",
+  score: 3,
+    text: `
+Kostlivec se po zásahu rozpadá na prach a ticho katakomb se znovu vrací. Mezi zbytky jeho zbroje však něco slabě září — dvě odlišné relikvie.
+
+Vzít si můžeš jen jednu. Zvolíš-li si artefakt, který je správnou odpovědí na otázku, čeká tě snazší cesta dál.
+
+<span class="question">
+Který artefakt je vhodnější pro Čaroděje?
+</span>
+  `,
+  choices: [
+    { text: "Ochranný amulet", next: "item1A" },
+    { text: "Dračí kámen", next: "item1B" }
+  ]
+},
+
+win2: {
+  chapter: "AKT II — Svatyně",
+  result: "correct",
+  score: 3,
+    text: `
+Zdivočelý vrk padá raněný na oltář. Ještě vydechne naposledy a jeho tělo zůstane nehybné. Pod ním ale nacházíš dvě podivné relikvie, jako by nebyly z tohoto světa.
+
+Vzít si můžeš jen jednu. Zvolíš-li si artefakt, který je správnou odpovědí na otázku, čeká tě snazší cesta dál.
+
+<span class="question">
+Který artefakt je vhodnější pro Elfku?
+</span>
+  `,
+  choices: [
+    { text: "Mithrilová zbroj", next: "item2A" },
+    { text: "Černá zbroj", next: "item2B" }
+  ]
+},
+
+item1A: {
+  chapter: "AKT II — Katakomby",
+  result: "wrong",
+  score: -1,
+    text: `
+Ochranný amulet opravdu není pro Čaroděje lepší než Dračí kámen. Přesto ti ale může nyní propůjčit své schopnosti. Pokud víš správnou odpověď na otázku.
+
+<span class="question">
+Lze ochranný amulet s trochou štěstí získat na klanovém úkolu Prokleté bažiny?
+</span>
+  `,
+  choices: [
+    { text: "Ano", next: "Ano1" },
+    { text: "Ne", next: "Ne1" }
+  ]
+},
+
+item2A: {
+  chapter: "AKT II — Svatyně",
+  result: "wrong",
+  score: -3,
+    text: `
+Mithrilová zbroj opravdu není pro Elfku lepší než Černá zbroj. Přesto ti ale může nyní propůjčit své schopnosti. Pokud víš správnou odpověď na otázku.
+
+<span class="question">
+Lze mithrilovou zbroj s trochou štěstí získat na klanovém úkolu Chrám Bílé sekty?
+</span>
+  `,
+  choices: [
+    { text: "Ano", next: "Ano2" },
+    { text: "Ne", next: "Ne2" }
+  ]
+},
+
+item1B: {
+  chapter: "AKT II — Katakomby",
+  result: "correct",
+  score: 5,
+    text: `
+Dračí kámen je opravdu lepší pro čaroděje. Nyní ti může propůjčit své schopnosti. Pokud víš správnou odpověď na otázku.
+
+<span class="question">
+Lze dračí kámen s trochou štěstí získat na klanovém úkolu Pavoučí soutěska?
+</span>
+  `,
+  choices: [
+    { text: "Ano", next: "Ano1" },
+    { text: "Ne", next: "Ne1" }
+  ]
+},
+
+item2B: {
+  chapter: "AKT II — Svatyně",
+  result: "correct",
+  score: 6,
+    text: `
+Černá zbroj je opravdu lepší pro Elfku. Nyní ti může propůjčit své schopnosti. Pokud víš správnou odpověď na otázku.
+
+<span class="question">
+Lze černou zbroj s trochou štěstí získat na klanovém úkolu Elfí hvozd?
+</span>
+  `,
+  choices: [
+    { text: "Ano", next: "Ne2" },
+    { text: "Ne", next: "Ano2" }
+  ]
+},
+
+Ne1: {
+  chapter: "AKT III — Nekromantí labyrint",
+  result: "wrong",
+  score: -2,
+    text: `
+Ocitl ses na pitevním stole Safírového nekromanta. Právě recituje nějaká zaklínadla.
+
+<span class="question">
+Uteč!
+</span>
+  `,
+  choices: [
+    { text: "Pomalu se vyplížím ven z místnosti.", next: "lehka" },
+    { text: "Uteču nejrychleji jak umím.", next: "Ano2" }
+  ]
+},
+
+Ano1: {
+  chapter: "AKT III — Nekromantí labyrint",
+  result: "correct", 
+  score: 3,
+    text: `
+Nekromantí labyrint se vine chodbami z kostí, které propojují evidentně stále používané laboratoře. Mrtvoly na stolech se občas slabě pohnou, i když jim chybí končetiny nebo tvář. 
+
+Na zemi leží otevřené knihy plné poznámek. Jedna věta se opakuje znovu a znovu: „Pán se brzy probudí.“
+
+Ze zamčených komor doléhá tlumené bušení a skřípání.
+
+Cestu z labyrint najdeš, pokud zodpovíš otázku.
+
+<span class="question">
+Kde lze získat artefakt Kniha mrtvých z Nekromantího setu?
+</span>
+  `,
+  choices: [
+    { text: "u alchymisty", next: "Ne2" },
+    { text: "na obřišti", next: "lehka" }
+  ]
+},
+
+Ne2: {
+  chapter: "AKT III — Upíří krypta",
+  result: "wrong",
+  score: -2,
+    text: `
+Odpověděl jsi špatně a dál bloudíš. Vstoupil jsi do Upíří krypty. Na víku jednoho sarkofágu je vyryt starý erb. Pod ním stojí: „Krev pro Morvakara.“
+
+Ihned si tě všimnul mocný Krvesaj.
+
+Rychle zodpověz otázku a utečeš mu.
+
+<span class="question">
+Která upíří kápě nelze opravit za kredity?
+</span>
+  `,
+  choices: [
+    { text: "Upíří kápě", next: "tezka" },
+    { text: "Upíří kápě VIP", next: "Ne1" }
+  ]
+},
+
+Ano2: {
+  chapter: "AKT III — Upíří krypta",
+  result: "correct",
+  score: 3,
+    text: `
+Ze zdí trčí rezavé háky a zbytky kostí, některé stále spojené řetězy, které tu držely oběti při rituálních krmeních. Vzduch je hustý, kovově sladký, a z hlubších sálů se ozývá pomalé, pravidelné srkání - někdo tu ještě stále pije.
+
+Odpověz správně na otázku a Upír si tě nevšimne.
+
+<span class="question">
+Lze efekt sání zdraví a energie Upíří kápě zrušit použitím kouzla Magická očista?
+</span>
+  `,
+  choices: [
+    { text: "Ano, lze.", next: "Ne2" },
+    { text: "Ne, nelze.", next: "tezka" }
+  ]
+},
+
+tezka: {
+  chapter: "AKT III — Upíří krypta",
+  result: "correct",
+  score: 12,
+    text: `
+Sice jsi upírovi unikl, ale stihnul na tebe seslat prokletí. Od této chvíle budeš cítit jeho vliv a s každým dalším krokem se bude zhoršovat. V hlavě slyšíš hlasy: „Morvakar přichází...“
+
+Zbav se prokletí, než bude pozdě. Odpověz správně na otázku.
+<span class="question">
+Které z těchto kouzel neumí jednotka Skřetí upír?
+</span>
+  `,
+  choices: [
+    { text: "Neobratnost.", next: "akt4B" },
+    { text: "Strach.", next: "akt4A" },
+    { text: "Otrava.", next: "akt4B" },
+    { text: "Únava.", next: "akt4B" }
+  ]
+},
+
+lehka: {
+  chapter: "AKT III — Nekromantí labyrint",
+  result: "correct",
+  score: 10,
+    text: `
+Zdánlivě jsi našel cestu z labyrintu. Ve skutečnosti to byla ale jen iluze vytvořená kouzlem Safírového nekromanta a ocitl ses ve slepé chodbě.
+
+Cestu z ní najdeš, pokud se zbavíš onoho kouzla - zodpověz správně otázku.
+<span class="question">
+Který nekromant ovládá kouzlo Chrabrost?
+</span>
+  `,
+  choices: [
+    { text: "lesní", next: "akt4B" },
+    { text: "safírový", next: "akt4B" },
+    { text: "andělský", next: "akt4A" },
+    { text: "pekelný", next: "akt4B" }
+  ]
+},
+
+akt4B: {
+  chapter: "AKT IV — Dračí nora",
+  result: "wrong",
+  score: -10,
+    text: `
+To jméno tě provází od chvíle, kdy jsi vstoupil do pevnosti. Objevuje se v kameni, v dávných spisech i v místech, kde by už dávno nemělo nic zůstat čitelné.
+
+<span class="question">
+Morvakar.
+</span>
+
+
+Teprve teď si připouštíš, že nejde o označení místa. Všechno, co jsi viděl, ukazuje na jedinou věc — že pevnost nebyla postavena kvůli něčemu. Byla postavena kvůli někomu.
+
+Nyní už není cesty zpět.
+  `,
+  choices: [
+    { text: "Pokračovat.", next: "akt4BB" },
+  ]
+},
+
+akt4A: {
+  chapter: "AKT IV — Dračí nora",
+  result: "correct",
+  score: 10,
+    text: `
+To jméno tě provází od chvíle, kdy jsi vstoupil do pevnosti. Objevuje se v kameni, v dávných spisech i v místech, kde by už dávno nemělo nic zůstat čitelné.
+
+<span class="question">
+Morvakar.
+</span>
+
+Teprve teď si připouštíš, že nejde o označení místa. Všechno, co jsi viděl, ukazuje na jedinou věc — že pevnost nebyla postavena kvůli něčemu. Byla postavena kvůli někomu.
+
+Nyní už není cesty zpět.
+  `,
+  choices: [
+    { text: "Pokračovat.", next: "akt4AA" }
+  ]
+},
+
+akt4BB: {
+  chapter: "AKT IV — Dračí nora",
+  score: 2,
+    text: `
+Schodiště končí v prostoru, který nemá přirozené hranice.
+
+Obrovská jeskynní klenba se ztrácí někde v dálce za oblakem prachu a páry. Kámen je místy roztavený do hladkých lávových proudů, jinde popraskaný žárem.
+
+Najednou spatřuješ obrysy něčeho, co vypadá jako dračí líheň.
+<span class="question">
+Na 11. levelu hradu je úkol rádce, po jehož splnění lze získat dračí vejce. Jakou nejvyšší barvu vejce můžeš získat za tento úkol?
+</span>
+  `,
+  choices: [
+    { text: "červenou", next: "dracek1" },
+    { text: "bílou", next: "dracek1" },
+    { text: "modrou", next: "dracek2" },
+    { text: "černou", next: "dracek1" }
+  ]
+},
+
+akt4AA: {
+  chapter: "AKT IV — Dračí nora",
+  score: 2,
+    text: `
+Schodiště končí v prostoru, který nemá přirozené hranice.
+
+Obrovská jeskynní klenba se ztrácí někde v dálce za oblakem prachu a páry. Kámen je místy roztavený do hladkých lávových proudů, jinde popraskaný žárem.
+
+Najednou spatřuješ obrysy něčeho, co vypadá jako dračí líheň.
+<span class="question">
+Na 11. levelu hradu je úkol rádce, po jehož splnění lze získat dračí vejce. Při plnění můžeš využít artefakty v laboratoři čaroděje. Který z těchto vzácných artefaktů se tam nachází?
+</span>
+  `,
+  choices: [
+    { text: "Upíří kápě VIP", next: "dracek2" },
+    { text: "Plášť mlhy", next: "dracek2" },
+    { text: "Zlatá zaječí packa", next: "dracek3" },
+    { text: "Sedmimílové zlaté boty", next: "dracek2" }
+  ]
+},
+
+dracek1: {
+  chapter: "AKT IV — Dračí nora",
+    result: "wrong",
+    score: -5,
+    text: `
+Několik vejcí praskne. Uvnitř se něco hýbe.
+Zvuk se rozléhá celou dračí norou.
+Cítíš pohyb za sebou.
+
+Něco se probudilo. Utíkej!
+<span class="question">
+Který z dráčků má rád mokřady?
+  `,
+  choices: [
+    { text: "modrý", next: "drak1" },
+    { text: "zelený", next: "drak2" },
+    { text: "bílý", next: "drak1" },
+  ]
+},
+
+dracek2: {
+  chapter: "AKT IV — Dračí nora",
+  score: 15,
+    text: `
+Mezi vejci nacházíš jedno prasklé. Uvnitř je čerstvá slizká stopa. Kolem něj jsou škrábance ve skále.
+Nejsou staré.
+
+Z hloubky nory se ozve pohyb. Raději se schovej!
+<span class="question">
+Dle 'Pán hradu lore' - který národ či rasa téměř vyhubil dráčky a draky?
+</span>
+  `,
+  choices: [
+    { text: "skřeti", next: "drak2" },
+    { text: "elfové", next: "drak1" },
+    { text: "trpaslíci", next: "drak3" },
+    { text: "lidé", next: "drak2" }
+  ]
+},
+
+dracek3: {
+  chapter: "AKT IV — Dračí nora",
+    result: "correct",
+    score: 20,
+    text: `
+Objevil jsi několik dračích vejcí, některá jsou dokonce vylíhlá.
+
+Za tebou se ozve těžký krok.
+Z temnoty vystoupí vysoká dračí postava, z poloviny skrytá v prachu a páře.
+
+Neútočí.
+Zastaví se pár kroků od tebe a skloní hlavu k otevřenému vejci.
+
+Pak zpátky k tobě.
+<span class="question">
+Před několika věky se Valyrii podařilo udělat rekord v počtu dráčků a draků vlastněných jedním klanem. Kolik jich bylo?
+</span>
+  `,
+  choices: [
+    { text: "100 malých a 50 velkých", next: "drak2" },
+    { text: "90 malých a 60 velkých", next: "drak3" },
+    { text: "85 malých a 57 velkých", next: "drak2" },
+    { text: "80 malých a 60 velkých", next: "drak2" }
+  ]
+},
+
+drak1: {
+  chapter: "AKT IV — Dračí nora",
+    result: "wrong",
+    score: -5,
+    text: `
+Obrovský veledrak Morvakar se zvedá z temnoty, jeho tělo zaplní celý prostor.
+Otočí hlavu přímo k tobě. První krok rozechvěje kamennou podlahu.
+
+Morvakar tě identifikoval jako hrozbu. Z jeho tlamy směrem k tobě vyšlehne sytě červený ohnivý dech.
+
+<span class="question">
+Jaké dvě šupiny po sobě zanechá Pekelný veledrak poté co jej zabiješ?
+</span>
+  `,
+  choices: [
+    { text: "červenou a nejzlatější", next: "ending1" },
+    { text: "černou a nejzlatější", next: "ending2" },
+    { text: "2x nejzlatější", next: "ending1" },
+  ]
+},
+
+drak2: {
+  chapter: "AKT IV — Dračí nora",
+  score: 5,
+    text: `
+Objevil se před tebou obrovský veledrak Morvakar.
+
+Neútočí.
+Zastaví se pár metrů od tebe.
+
+Měří si tě pohledem. Nevidíš v něm vztek. Spíš rozhodování, čeká, co uděláš. Utečeš, zaútočíš, osvobodíš ho?
+
+<span class="question">
+Pokud budeš chtít vykrmit Skalního dráčka na Skalního draka a následně na Stinného veledraka, kolik jídla budeš potřebovat?
+</span>
+  `,
+ choices: [
+    { text: "580 000", next: "ending2" },
+    { text: "530 000", next: "ending3" },
+    { text: "540 000", next: "ending2" },
+  ]
+},
+
+drak3: {
+  chapter: "AKT IV — Dračí nora",
+    result: "correct",
+    score: 10,
+    text: `
+Objevil se před tebou obrovský veledrak Morvakar.
+Zastaví se před tebou.
+
+Jeho přítomnost je tak skutečná, ale nikoliv hrozivá.
+Skloní hlavu blíž k tobě.
+
+A ty poprvé cítíš, že nejsi vetřelec. Ale možná, možná jeho přítel. Nyní máš možnost Morvakara osvobodit.
+<span class="question">
+Kolik musí mít veledrak min. energie, aby mohl osvobodit zajaté Zlaté draky řetězu?
+</span>
+  `,
+  choices: [
+    { text: "1000", next: "ending3" },
+    { text: "1500", next: "ending3" },
+    { text: "2000", next: "ending4" },
+    { text: "2500", next: "ending3" }
+  ]
+},
+
+ending1: {
+    chapter: "Ending I - Popel",
+    score: -5,
+   text: `
+Ohnivý dech Morvakara tě zasáhne naplno.
+
+Na okamžik vidíš stěny dračí nory zalité rudým světlem. Pak už jen žár.
+
+Tvoje výprava končí zde.
+
+Pevnost Morvakaru si vyžádala další oběť.
+
+<span class="question">
+Odměna: 5 kreditů
+</span>
+  `,
+    choices: [{ text: "Ukončit hru", next: "submitEnding" }]
+},
+
+ending2: {
+    chapter: "Ending II - Přeživší",
+    score: 5,
+    text: `
+V poslední chvíli se ti podaří uniknout.
+
+Za zády slyšíš řev Morvakara a otřesy, které se šíří celou pevností.
+
+Když se konečně dostaneš na denní světlo, neohlédneš se.
+
+Přežil jsi.
+
+Ale odpovědi zůstaly hluboko pod zemí.
+
+<span class="question">
+Odměna: 10 kreditů
+</span>
+  `,
+    choices: [{ text: "Ukončit hru", next: "submitEnding" }]
+},
+
+ending3: {
+    chapter: "Ending III - Osvoboditel",
+    score: 10,
+    text: `
+Řetězy, které Morvakara poutaly po celá staletí, konečně povolí.
+
+Veledrak se pomalu zvedne a jeho mohutná křídla zaplní celý prostor.
+
+Dlouhé vteřiny na tebe hledí.
+
+Poté zamíří vzhůru a zmizí v oblacích nad pevností.
+
+Morvakar je svobodný.
+
+<span class="question">
+Odměna: 15 kreditů
+</span>
+  `,
+    choices: [{ text: "Ukončit hru", next: "submitEnding" }]
+},
+
+ending4: {
+    chapter: "Ending IV - Přítel",
+    score: 20,
+    text: `
+Když se poslední řetěz rozpadne, Morvakar je poprvé po staletích skutečně volný.
+
+Mohl by tě rozdrtit jediným pohybem. Místo toho se zastaví vedle tebe.
+
+Morvakar si tě vybral za svého pána ale i přítele, nyní jste oba navždy spojení.
+
+<span class="question">
+Odměna: 20 kreditů
+</span>
+  `,
+    choices: [{ text: "Ukončit hru", next: "submitEnding" }]
+}
+
+}
+
+
+    function updateScore() {
+    document.getElementById("scoreDisplay").innerText = "Score: " + score
+    }
+
+    function resetRun() {
+    visitedScenes.clear()
+    }
+
+    function updateProgress(sceneName) {
+
+    const keys = Object.keys(story)
+
+   // jen "hlavní postup" (ne death reset smyčky)
+    const linearScenes = keys.filter(k =>
+    !k.includes("death")
+    )
+
+    totalScenes = linearScenes.length
+
+    const index = linearScenes.indexOf(sceneName)
+
+    if (index >= 0) {
+    progress = ((index + 1) / totalScenes) * 100
+    }
+
+    document.getElementById("progressBar").style.width = progress + "%"
+
+    if (sceneName.includes("ending")) {
+  document.getElementById("progressBar").style.width = "100%"
+}
     }
 
     function startGame() {
+
+       visitedScenes = new Set()
 
       playerName = document.getElementById("playerName").value
 
@@ -248,7 +1520,13 @@
         return
       }
 
+      score = 0
+      updateScore()
+
       document.getElementById("bgMusic").play()
+
+      const scoreSound = document.getElementById("scoreSound")
+scoreSound.volume = 0.2
 
       document.getElementById("startScreen").style.display = "none"
       document.getElementById("game").style.display = "block"
@@ -256,66 +1534,284 @@
       loadScene("start")
     }
 
+    function fadeMusic(targetVolume, duration = 1500) {
+
+    const music = document.getElementById("bgMusic")
+
+    const startVolume = music.volume
+    const steps = 30
+
+    const stepTime = duration / steps
+    const volumeStep = (targetVolume - startVolume) / steps
+
+    let currentStep = 0
+
+    const interval = setInterval(() => {
+
+    currentStep++
+
+    music.volume += volumeStep
+
+    if (currentStep >= steps) {
+
+      music.volume = targetVolume
+
+      clearInterval(interval)
+    }
+
+    }, stepTime)
+
+    }
+
     function loadScene(sceneName) {
+  if (gameEnded) return;
 
-      const scene = story[sceneName]
+  const container = document.getElementById("container");
 
-      document.getElementById("chapter").innerText = scene.chapter || ""
-      document.getElementById("text").innerText = scene.text
+  // 1) FADE OUT
+  container.classList.add("fade-out");
 
-      const sceneImage = document.getElementById("sceneImage")
+  setTimeout(() => {
 
-      if(scene.image) {
-        sceneImage.src = scene.image
-        sceneImage.style.display = "block"
-      } else {
-        sceneImage.style.display = "none"
-      }
+    // --- EXISTUJÍCÍ LOGIKA ZAČÍNÁ TADY ---
 
-      const choicesDiv = document.getElementById("choices")
-      choicesDiv.innerHTML = ""
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
 
-      scene.choices.forEach(choice => {
+    const scene = story[sceneName];
 
-        const button = document.createElement("button")
-        button.innerText = choice.text
+    if (
+      typeof scene.score === "number" &&
+      !visitedScenes.has(sceneName)
+    ) {
+      visitedScenes.add(sceneName);
 
-        button.onclick = function() {
-          if(choice.next === "submitEnding") {
-            submitResult("Ztracen v hlubinách")
-          } else {
-            loadScene(choice.next)
-          }
+      score += scene.score;
+      updateScore();
+      showScorePopup(scene.score);
+      playScoreSound(scene.score ?? 0);
+    }
+
+    if (sceneName === "death") {
+      showScorePopup(0);
+      playScoreSound(scene.score ?? 0);
+
+      score = 0;
+      updateScore();
+
+      resetRun();
+    }
+
+    updateProgress(sceneName);
+
+    const resultMessage = document.getElementById("resultMessage");
+
+    resultMessage.className = "";
+    resultMessage.style.opacity = 0;
+
+    if (scene.result === "correct") {
+      resultMessage.innerText = "SPRÁVNĚ!";
+      resultMessage.classList.add("correct");
+    } else if (scene.result === "wrong") {
+      resultMessage.innerText = "CHYBA!";
+      resultMessage.classList.add("wrong");
+    } else {
+      resultMessage.innerText = "";
+    }
+
+    setTimeout(() => {
+      resultMessage.style.opacity = 1;
+    }, 50);
+
+    const endingBanner = document.getElementById("endingBanner");
+    endingBanner.innerHTML = "";
+
+    const endingTitles = {
+      ending1: "☠️ POPEL ☠️",
+      ending2: "⚔️ PŘEŽIVŠÍ ⚔️",
+      ending3: "🐉 OSVOBODITEL 🐉",
+      ending4: "👑 PŘÍTEL MORVAKARA 👑"
+    };
+
+    if (endingTitles[sceneName]) {
+      fadeMusic(0.12, 4000);
+
+      endingBanner.innerHTML =
+        `<div class="endingBanner">${endingTitles[sceneName]}</div>`;
+    }
+
+    const chapterElement = document.getElementById("chapter");
+
+    if (endingTitles[sceneName]) {
+      chapterElement.style.display = "none";
+    } else {
+      chapterElement.style.display = "block";
+    }
+
+    chapterElement.innerText = scene.chapter || "";
+    document.getElementById("text").innerHTML = scene.text;
+
+    const sceneImage = document.getElementById("sceneImage");
+
+    if (scene.image) {
+      sceneImage.src = scene.image;
+      sceneImage.style.display = "block";
+    } else {
+      sceneImage.style.display = "none";
+    }
+
+    const choicesDiv = document.getElementById("choices");
+    choicesDiv.innerHTML = "";
+
+    scene.choices.forEach(choice => {
+      const button = document.createElement("button");
+      button.innerText = choice.text;
+
+      button.onclick = function () {
+        if (choice.next === "submitEnding") {
+          submitResult();
+          return;
         }
 
-        choicesDiv.appendChild(button)
+        if (
+          choice.next === "ending1" ||
+          choice.next === "ending2" ||
+          choice.next === "ending3" ||
+          choice.next === "ending4"
+        ) {
+          ending = parseInt(choice.next.replace("ending", ""));
+        }
 
+        loadScene(choice.next);
+      };
+
+      choicesDiv.appendChild(button);
+    });
+
+    // 2) FADE IN
+    setTimeout(() => {
+      container.classList.remove("fade-out");
+    }, 80);
+
+  }, 160);
+}
+
+function showScorePopup(amount) {
+  const popup = document.getElementById("scorePopup");
+
+  popup.classList.remove("score-low", "score-mid", "score-high");
+
+  if (amount <= 0) {
+    popup.classList.add("score-low");
+  } else if (amount <= 10) {
+    popup.classList.add("score-mid");
+  } else {
+    popup.classList.add("score-high");
+  }
+
+  popup.innerText = amount > 0 ? "+" + amount : amount;
+
+  popup.classList.remove("show");
+  void popup.offsetWidth;
+  popup.classList.add("show");
+
+  popup.onanimationend = () => {
+    popup.classList.remove("show");
+    popup.onanimationend = null;
+  };
+}
+
+async function submitResult() {
+
+  if (isSubmitting || gameEnded) return;
+  isSubmitting = true;
+
+  document.querySelectorAll("button").forEach(btn => {
+    btn.disabled = true;
+  });
+
+  try {
+    await fetch("https://script.google.com/macros/s/AKfycbz8HdV3nx1InI0ClRLeW20MvLj9bXnH3n0dG__GLjai27CXBBwnnBqrCicqe8JrYeYo/exec", {
+      method: "POST",
+      body: JSON.stringify({
+        name: playerName,
+        ending: ending,
+        score: score,
+        time: new Date().toISOString()
       })
-    }
+    });
 
-    async function submitResult(endingName) {
+    gameEnded = true;   // 👈 přesuň SEM (až po úspěchu)
+    showEndScreen();
 
-      await fetch("https://script.google.com/macros/s/AKfycbz8HdV3nx1InI0ClRLeW20MvLj9bXnH3n0dG__GLjai27CXBBwnnBqrCicqe8JrYeYo/exec", {
-        method: "POST",
-        body: JSON.stringify({
-          name: playerName,
-          ending: endingName,
-          score: score
-        })
-      })
+  } catch (e) {
+    alert("Chyba při ukládání výsledku.");
+    console.error(e);
 
-      alert("Výsledek uložen!")
-    }
+  } finally {
+    isSubmitting = false;
+  }
+}
 
-    function toggleMusic() {
+function showEndScreen() {
 
-      const music = document.getElementById("bgMusic")
-      music.muted = !music.muted
+  const music = document.getElementById("bgMusic")
+  music.pause()
+  music.currentTime = 0
 
-      const button = document.getElementById("muteButton")
+  document.getElementById("game").style.display = "none";
+  document.getElementById("muteButton").style.display = "none";
+  document.getElementById("startScreen").style.display = "none";
+  document.getElementById("container").style.display = "none";
+  document.getElementById("progressContainer").style.display = "none";
+  document.getElementById("scoreDisplay").style.display = "none"; 
 
-      button.innerText = music.muted ? "🔇 Ztlumeno" : "🔊 Zvuk"
-    }
+  const screen = document.getElementById("endScreen");
+  screen.style.display = "block";
+
+  screen.innerHTML = `
+    <h1>Konec hry</h1>
+    <p>Děkujeme za odehrání Pevnosti Morvakaru.</p>
+
+    <h3>Výsledek</h2>
+    <p>Jméno: <b>${playerName}</b></p>
+    <p>Skóre: <b>${score}</b></p>
+  `;
+}
+
+
+    function setMuted(state) {
+  document.getElementById("bgMusic").muted = state
+  document.getElementById("scoreSound").muted = state
+}
+
+function toggleMusic() {
+  const music = document.getElementById("bgMusic")
+  setMuted(!music.muted)
+
+  document.getElementById("muteButton").innerText =
+    music.muted ? "🔇 Ztlumeno" : "🔊 Zvuk"
+}
+
+    function playScoreSound(amount = 0) {
+  const sound = document.getElementById("scoreSound")
+
+  let volume = audioConfig.low
+
+  if (amount >= 15) {
+    volume = audioConfig.high
+  } else if (amount >= 5) {
+    volume = audioConfig.mid
+  }
+
+  sound.volume = volume
+  sound.currentTime = 0
+
+  sound.play().catch(() => {})
+}
+
 
   </script>
 
